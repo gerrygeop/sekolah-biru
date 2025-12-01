@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, \Spatie\Permission\Traits\HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_active',
     ];
 
     /**
@@ -44,6 +46,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -57,5 +60,30 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    public function news()
+    {
+        return $this->hasMany(News::class, 'author_id');
+    }
+
+    public function achievements()
+    {
+        return $this->hasMany(Achievement::class, 'created_by');
+    }
+
+    public function virtualClasses()
+    {
+        return $this->hasMany(VirtualClass::class, 'created_by');
+    }
+
+    public function photoGalleries()
+    {
+        return $this->hasMany(PhotoGallery::class, 'created_by');
+    }
+
+    public function videoGalleries()
+    {
+        return $this->hasMany(VideoGallery::class, 'created_by');
     }
 }

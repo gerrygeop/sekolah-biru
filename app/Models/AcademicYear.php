@@ -21,4 +21,14 @@ class AcademicYear extends Model
     {
         return $query->where('is_active', true);
     }
+
+    public function studentStatistics()
+    {
+        return $this->hasMany(StudentStatistic::class);
+    }
+
+    public function alumniDistributions()
+    {
+        return $this->hasMany(AlumniDistribution::class);
+    }
 }
