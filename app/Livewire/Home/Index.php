@@ -6,53 +6,39 @@ use Livewire\Component;
 use App\Services\NewsService;
 use App\Services\StudentService;
 use App\Services\SchoolProfileService;
-use App\Services\SeoService;
+use Artesaos\SEOTools\Facades\SEOTools;
 
 class Index extends Component
 {
-    protected $newsService;
-    protected $studentService;
-    protected $schoolService;
-    protected $seoService;
-
-    public function boot(
-        NewsService $newsService,
-        StudentService $studentService,
-        SchoolProfileService $schoolService,
-        SeoService $seoService
-    ) {
-        $this->newsService = $newsService;
-        $this->studentService = $studentService;
-        $this->schoolService = $schoolService;
-        $this->seoService = $seoService;
-    }
-
     public function mount()
     {
         // Set SEO for homepage
-        $this->seoService->setPageSeo(
-            'Beranda - SMP Digital',
-            'Website resmi SMP Digital - Sekolah Menengah Pertama unggul dalam prestasi dan berkarakter',
-            asset('images/og-default.jpg')
-        );
+        SEOTools::setTitle('Beranda - SMP Digital');
+        SEOTools::setDescription('Website resmi SMP Digital - Sekolah Menengah Pertama unggul dalam prestasi dan berkarakter');
+        SEOTools::opengraph()->setUrl(url()->current());
+        SEOTools::opengraph()->addProperty('type', 'website');
     }
 
     public function render()
     {
-        $latestNews = $this->newsService->getLatestNews(4);
-        $featuredAchievements = $this->studentService->getAchievements(null, 3);
-        $currentYear = $this->studentService->getCurrentAcademicYear();
-        $schoolProfile = $this->schoolService->getSchoolProfile();
+        $newsService = app(NewsService::class);
+        $studentService = app(StudentService::class);
+        $schoolService = app(SchoolProfileService::class);
+        
+        $latestNews = $newsService->getLatestNews(4);
+        $featuredAchievements = $studentService->getAchievements(null, 3);
+        $currentYear = $studentService->getCurrentAcademicYear();
+        $schoolProfile = $schoolService->getSchoolProfile();
         
         $stats = null;
         if ($currentYear) {
-            $statistics = $this->studentService->getStudentStatistics($currentYear->id);
+            $statistics = $studentService->getStudentStatistics($currentYear->id);
             $totalStudents = $statistics->sum(function($stat) {
                 return $stat->male_count + $stat->female_count;
             });
             
-            $employees = $this->schoolService->getEmployees('guru');
-            $achievements = $this->studentService->getAchievements(null, null);
+            $employees = $schoolService->getEmployees('guru');
+            $achievements = $studentService->getAchievements(null, null);
             
             $stats = [
                 'students' => $totalStudents,
@@ -66,6 +52,6 @@ class Index extends Component
             'featuredAchievements' => $featuredAchievements,
             'schoolProfile' => $schoolProfile,
             'stats' => $stats,
-        ])->layout('components.app-layout');
+        ])->layout('layouts.app');
     }
 }
