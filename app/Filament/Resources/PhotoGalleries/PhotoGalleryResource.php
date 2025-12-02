@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Filament\Resources\PhotoGalleries;
+
+use App\Filament\Resources\PhotoGalleries\Pages\CreatePhotoGallery;
+use App\Filament\Resources\PhotoGalleries\Pages\EditPhotoGallery;
+use App\Filament\Resources\PhotoGalleries\Pages\ListPhotoGalleries;
+use App\Filament\Resources\PhotoGalleries\Pages\ViewPhotoGallery;
+use App\Filament\Resources\PhotoGalleries\Schemas\PhotoGalleryForm;
+use App\Filament\Resources\PhotoGalleries\Schemas\PhotoGalleryInfolist;
+use App\Filament\Resources\PhotoGalleries\Tables\PhotoGalleriesTable;
+use App\Models\PhotoGallery;
+use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+class PhotoGalleryResource extends Resource
+{
+    protected static ?string $model = PhotoGallery::class;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'title';
+
+    public static function form(Schema $schema): Schema
+    {
+        return PhotoGalleryForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return PhotoGalleryInfolist::configure($schema);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return PhotoGalleriesTable::configure($table);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListPhotoGalleries::route('/'),
+            'create' => CreatePhotoGallery::route('/create'),
+            'view' => ViewPhotoGallery::route('/{record}'),
+            'edit' => EditPhotoGallery::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRecordRouteBindingEloquentQuery(): Builder
+    {
+        return parent::getRecordRouteBindingEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+}
