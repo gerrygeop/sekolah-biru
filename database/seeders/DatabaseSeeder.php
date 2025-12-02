@@ -23,10 +23,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create Roles
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $staffRole = Role::firstOrCreate(['name' => 'staff']);
-        $petinggiRole = Role::firstOrCreate(['name' => 'petinggi']);
+        // Seed Roles and Permissions first
+        $this->call(RoleSeeder::class);
+        
+        // Get roles
+        $adminRole = Role::where('name', 'super_admin')->first();
+        $staffRole = Role::where('name', 'staff')->first();
 
         // Create Admin User
         $admin = User::factory()->create([
