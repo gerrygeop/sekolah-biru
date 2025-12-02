@@ -122,7 +122,7 @@
                                     {{ $news->category->name }}
                                 </span>
                                 <span class="text-xs text-gray-500">
-                                    {{ $news->published_at->diffForHumans() }}
+                                    {{ $news->published_at }}
                                 </span>
                             </div>
                             <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition">
