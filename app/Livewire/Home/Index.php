@@ -6,21 +6,35 @@ use Livewire\Component;
 use App\Services\NewsService;
 use App\Services\StudentService;
 use App\Services\SchoolProfileService;
+use App\Services\SeoService;
 
 class Index extends Component
 {
     protected $newsService;
     protected $studentService;
     protected $schoolService;
+    protected $seoService;
 
     public function boot(
         NewsService $newsService,
         StudentService $studentService,
-        SchoolProfileService $schoolService
+        SchoolProfileService $schoolService,
+        SeoService $seoService
     ) {
         $this->newsService = $newsService;
         $this->studentService = $studentService;
         $this->schoolService = $schoolService;
+        $this->seoService = $seoService;
+    }
+
+    public function mount()
+    {
+        // Set SEO for homepage
+        $this->seoService->setPageSeo(
+            'Beranda - SMP Digital',
+            'Website resmi SMP Digital - Sekolah Menengah Pertama unggul dalam prestasi dan berkarakter',
+            asset('images/og-default.jpg')
+        );
     }
 
     public function render()
