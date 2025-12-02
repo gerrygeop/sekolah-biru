@@ -122,7 +122,7 @@
                                         {{ $news->category->name }}
                                     </span>
                                     <span class="text-xs text-gray-500">
-                                        {{ $news->published_at->diffForHumans() }}
+                                        {{ $news->published_at?->diffForHumans() ?? $news->created_at->diffForHumans() }}
                                     </span>
                                 </div>
                                 <h3
