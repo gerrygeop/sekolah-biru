@@ -5,6 +5,7 @@ namespace App\Livewire\Profile;
 use Livewire\Component;
 use App\Services\StudentService;
 use App\Models\AcademicYear;
+use Artesaos\SEOTools\Facades\SEOMeta;
 
 class StudentStatistics extends Component
 {
@@ -23,6 +24,9 @@ class StudentStatistics extends Component
                 $this->selectedYearId = $currentYear->id;
             }
         }
+
+        SEOMeta::setTitle('Statistik Siswa - SMP Digital', false);
+        SEOMeta::setDescription('Lihat statistik jumlah siswa SMP Digital berdasarkan jenis kelamin untuk setiap tahun ajaran.');
     }
 
     public function setYear($yearId)
