@@ -15,11 +15,11 @@ class NewsService
             $query = News::with(['category', 'author'])
                 ->published()
                 ->latest('publish_date');
-            
+
             if ($categoryId) {
                 $query->where('category_id', $categoryId);
             }
-            
+
             return $query->paginate($perPage);
         } catch (\Exception $e) {
             Log::error('Error fetching published news', [
@@ -29,7 +29,7 @@ class NewsService
             throw $e;
         }
     }
-    
+
     public function getFeaturedNews($limit = 5)
     {
         return Cache::remember('featured_news', 3600, function () use ($limit) {
@@ -50,19 +50,46 @@ class NewsService
             ->limit($limit)
             ->get();
     }
-    
+
+    public function getRelatedNews(News $current, $limit = 4)
+    {
+        $related = News::with(['category', 'author'])
+            ->published()
+            ->where('category_id', $current->category_id)
+            ->where('id', '!=', $current->id)
+            ->latest('publish_date')
+            ->limit($limit)
+            ->get();
+
+        if ($related->count() < $limit) {
+            $needed = $limit - $related->count();
+            $excludeIds = array_merge([$current->id], $related->pluck('id')->toArray());
+
+            $more = News::with(['category', 'author'])
+                ->published()
+                ->whereNotIn('id', $excludeIds)
+                ->latest('publish_date')
+                ->limit($needed)
+                ->get();
+
+            $related = $related->concat($more);
+        }
+
+        return $related;
+    }
+
     public function createNews(array $data)
     {
         try {
             DB::beginTransaction();
-            
+
             $news = News::create($data);
-            
+
             Log::info('News created', ['news_id' => $news->id, 'title' => $news->title]);
-            
+
             // Clear cache
             Cache::forget('featured_news');
-            
+
             DB::commit();
             return $news;
         } catch (\Exception $e) {
@@ -71,18 +98,18 @@ class NewsService
             throw $e;
         }
     }
-    
+
     public function updateNews(News $news, array $data)
     {
         try {
             DB::beginTransaction();
-            
+
             $news->update($data);
-            
+
             Log::info('News updated', ['news_id' => $news->id]);
-            
+
             Cache::forget('featured_news');
-            
+
             DB::commit();
             return $news;
         } catch (\Exception $e) {
@@ -96,13 +123,13 @@ class NewsService
     {
         try {
             DB::beginTransaction();
-            
+
             $news->delete();
-            
+
             Log::info('News deleted', ['news_id' => $news->id]);
-            
+
             Cache::forget('featured_news');
-            
+
             DB::commit();
             return true;
         } catch (\Exception $e) {
