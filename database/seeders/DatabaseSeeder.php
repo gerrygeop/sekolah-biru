@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Seed Roles and Permissions first
-        $this->call(RoleSeeder::class);
-        
+        $this->call(SpatiePermissionsSeeder::class);
+
         // Get roles
         $adminRole = Role::where('name', 'super_admin')->first();
         $staffRole = Role::where('name', 'staff')->first();
@@ -35,8 +35,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin Sekolah',
             'email' => 'admin@sekolah.com',
             'password' => bcrypt('password'),
-            'role' => 'admin',
-            'is_active' => true,
         ]);
         $admin->assignRole($adminRole);
 
@@ -45,8 +43,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Staff Sekolah',
             'email' => 'staff@sekolah.com',
             'password' => bcrypt('password'),
-            'role' => 'staff',
-            'is_active' => true,
         ]);
         $staff->assignRole($staffRole);
 
