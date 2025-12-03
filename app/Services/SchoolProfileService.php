@@ -28,7 +28,7 @@ class SchoolProfileService
 
     public function getEmployees($type = null)
     {
-        $query = Employee::active()->latest('join_date');
+        $query = Employee::active()->orderBy('join_date', 'asc');
 
         if ($type) {
             $query->where('type', $type);
