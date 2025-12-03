@@ -27,7 +27,8 @@
 		@if ($achievements->isNotEmpty())
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				@foreach ($achievements as $achievement)
-					<div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+					<a href="{{ route('graduates.achievements.show', $achievement->slug) }}"
+						class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
 						@if ($achievement->image_path)
 							<div class="aspect-video bg-gray-200 overflow-hidden">
 								<img src="{{ Storage::url($achievement->image_path) }}" alt="{{ $achievement->title }}"
@@ -48,7 +49,7 @@
 									{{ $achievement->category }}
 								</span>
 								<span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
-									{{ $achievement->rank }}
+									{{ $achievement->achievement_rank }}
 								</span>
 								<span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">
 									{{ $achievement->level }}
@@ -64,7 +65,7 @@
 								{{ $achievement->achievement_date->format('d M Y') }}
 							</p>
 						</div>
-					</div>
+					</a>
 				@endforeach
 			</div>
 
