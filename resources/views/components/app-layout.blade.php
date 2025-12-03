@@ -16,7 +16,7 @@
 
 <body class="font-sans antialiased bg-gray-50 text-gray-900">
 	<!-- Header -->
-	<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+	<header x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
 		<div class="container mx-auto px-4">
 			<div class="flex items-center justify-between h-16">
 				<!-- Logo -->
@@ -117,16 +117,20 @@
 				</nav>
 
 				<!-- Mobile Menu Button -->
-				<button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100">
-					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<button @click="mobileMenuOpen = !mobileMenuOpen"
+					class="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100">
+					<svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+					<svg x-show="mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 					</svg>
 				</button>
 			</div>
 		</div>
 
 		<!-- Mobile Menu -->
-		<div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200"
+		<div x-cloak x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200"
 			x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
 			class="lg:hidden border-t border-gray-200 bg-white">
 			<div class="container mx-auto px-4 py-4 space-y-1">
