@@ -9,6 +9,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Resources\Resource;
@@ -16,12 +17,16 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class SchoolProfileResource extends Resource
 {
     protected static ?string $model = SchoolProfile::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingLibrary;
+    protected static string|UnitEnum|null $navigationGroup = 'Profil Sekolah';
+    protected static string|null $label = 'Profil Sekolah';
+    protected static ?int $navigationSort = -16;
 
     public static function form(Schema $schema): Schema
     {
@@ -43,7 +48,12 @@ class SchoolProfileResource extends Resource
                     ->label('Email address')
                     ->email(),
                 TextInput::make('whatsapp'),
-                TextInput::make('logo_path'),
+                FileUpload::make('logo_path')
+                    ->label('Logo Sekolah')
+                    ->directory('school-logos')
+                    ->image()
+                    ->maxSize(5024)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -63,8 +73,6 @@ class SchoolProfileResource extends Resource
                     ->label('Email address')
                     ->searchable(),
                 TextColumn::make('whatsapp')
-                    ->searchable(),
-                TextColumn::make('logo_path')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

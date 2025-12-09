@@ -16,12 +16,16 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ContactInfoResource extends Resource
 {
     protected static ?string $model = ContactInfo::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhone;
+    protected static string|UnitEnum|null $navigationGroup = 'Profil Sekolah';
+    protected static string|null $label = 'Info Kontak';
+    protected static ?int $navigationSort = -12;
 
     public static function form(Schema $schema): Schema
     {

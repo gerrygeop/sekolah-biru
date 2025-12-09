@@ -21,12 +21,16 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class SeoSettingResource extends Resource
 {
     protected static ?string $model = SeoSetting::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedGlobeAlt;
+    protected static string|UnitEnum|null $navigationGroup = 'Profil Sekolah';
+    protected static string|null $label = 'SEO Website';
+    protected static ?int $navigationSort = -11;
 
     protected static ?string $recordTitleAttribute = 'meta_title';
 

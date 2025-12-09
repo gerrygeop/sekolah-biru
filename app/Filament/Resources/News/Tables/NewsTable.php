@@ -20,20 +20,22 @@ class NewsTable
     {
         return $table
             ->columns([
-                TextColumn::make('category_id')
-                    ->numeric()
-                    ->sortable(),
+                ImageColumn::make('featured_image')
+                    ->label('Gambar')
+                    ->placeholder('-'),
                 TextColumn::make('title')
                     ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
-                ImageColumn::make('featured_image'),
+
+                TextColumn::make('category.name')
+                    ->numeric()
+                    ->sortable(),
+
                 TextColumn::make('publish_date')
                     ->date()
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge(),
-                TextColumn::make('author_id')
+                TextColumn::make('author.name')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('views')
@@ -43,10 +45,6 @@ class NewsTable
                     ->boolean(),
                 IconColumn::make('is_pinned')
                     ->boolean(),
-                TextColumn::make('meta_title')
-                    ->searchable(),
-                TextColumn::make('meta_keywords')
-                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

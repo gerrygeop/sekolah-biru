@@ -10,6 +10,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\IconEntry;
@@ -20,12 +21,16 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class OrganizationStructureResource extends Resource
 {
     protected static ?string $model = OrganizationStructure::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleGroup;
+    protected static string|UnitEnum|null $navigationGroup = 'Profil Sekolah';
+    protected static string|null $label = 'Struktur Organisasi';
+    protected static ?int $navigationSort = -15;
 
     public static function form(Schema $schema): Schema
     {
@@ -36,13 +41,20 @@ class OrganizationStructureResource extends Resource
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('nip'),
-                TextInput::make('photo_path'),
                 TextInput::make('order')
                     ->required()
                     ->numeric()
                     ->default(0),
+                FileUpload::make('photo_path')
+                    ->label('Foto')
+                    ->directory('organization-structure-photos')
+                    ->image()
+                    ->maxSize(5024)
+                    ->columnSpanFull(),
                 Toggle::make('is_active')
-                    ->required(),
+                    ->required()
+                    ->columnSpanFull()
+                    ->default(true),
             ]);
     }
 
@@ -78,8 +90,6 @@ class OrganizationStructureResource extends Resource
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('nip')
-                    ->searchable(),
-                TextColumn::make('photo_path')
                     ->searchable(),
                 TextColumn::make('order')
                     ->numeric()

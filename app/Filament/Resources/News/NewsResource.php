@@ -17,12 +17,16 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class NewsResource extends Resource
 {
     protected static ?string $model = News::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
+    protected static string|UnitEnum|null $navigationGroup = 'Berita';
+    protected static string|null $label = 'Berita';
+    protected static ?int $navigationSort = -6;
 
     protected static ?string $recordTitleAttribute = 'title';
 

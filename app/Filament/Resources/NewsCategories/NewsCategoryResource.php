@@ -21,12 +21,16 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class NewsCategoryResource extends Resource
 {
     protected static ?string $model = NewsCategory::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
+    protected static string|UnitEnum|null $navigationGroup = 'Berita';
+    protected static string|null $label = 'Kategori Berita';
+    protected static ?int $navigationSort = -5;
 
     public static function form(Schema $schema): Schema
     {
@@ -61,14 +65,14 @@ class NewsCategoryResource extends Resource
                     ->placeholder('-'),
                 TextEntry::make('order')
                     ->numeric(),
-                IconEntry::make('is_active')
-                    ->boolean(),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
                     ->dateTime()
                     ->placeholder('-'),
+                IconEntry::make('is_active')
+                    ->boolean(),
             ]);
     }
 
@@ -77,8 +81,6 @@ class NewsCategoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('slug')
                     ->searchable(),
                 TextColumn::make('icon')
                     ->searchable(),

@@ -17,12 +17,16 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class AchievementResource extends Resource
 {
     protected static ?string $model = Achievement::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
+    protected static string|UnitEnum|null $navigationGroup = 'Alumni & Lulusan';
+    protected static string|null $label = 'Prestasi';
+    protected static ?int $navigationSort = -9;
 
     protected static ?string $recordTitleAttribute = 'title';
 

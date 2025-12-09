@@ -8,7 +8,9 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -19,16 +21,11 @@ class VideoGalleriesTable
     {
         return $table
             ->columns([
+                ImageColumn::make('thumbnail_url')
+                    ->label('Thumbnail'),
                 TextColumn::make('title')
                     ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
-                TextColumn::make('youtube_url')
-                    ->searchable(),
-                TextColumn::make('youtube_id')
-                    ->searchable(),
-                TextColumn::make('thumbnail_url')
-                    ->searchable(),
+
                 TextColumn::make('video_date')
                     ->date()
                     ->sortable(),
@@ -40,7 +37,7 @@ class VideoGalleriesTable
                     ->sortable(),
                 IconColumn::make('is_published')
                     ->boolean(),
-                TextColumn::make('created_at')
+                TextColumn::make('author.name')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

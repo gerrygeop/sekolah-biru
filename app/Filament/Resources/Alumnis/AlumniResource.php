@@ -18,22 +18,28 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class AlumniResource extends Resource
 {
     protected static ?string $model = Alumni::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
+    protected static string|UnitEnum|null $navigationGroup = 'Alumni & Lulusan';
+    protected static string|null $label = 'Data Alumni';
+    protected static ?int $navigationSort = -11;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -43,7 +49,9 @@ class AlumniResource extends Resource
             ->components([
                 TextInput::make('name')
                     ->required(),
-                TextInput::make('nisn'),
+                TextInput::make('nisn')
+                    ->label('NISN')
+                    ->required(),
                 TextInput::make('graduation_year')
                     ->required()
                     ->numeric(),
@@ -54,9 +62,13 @@ class AlumniResource extends Resource
                 TextInput::make('email')
                     ->label('Email address')
                     ->email(),
+
                 Textarea::make('testimonial')
                     ->columnSpanFull(),
-                TextInput::make('photo_path'),
+
+                TextInput::make('photo_path')
+                    ->label('Photo')
+                    ->columnSpanFull(),
                 Toggle::make('is_featured')
                     ->required(),
             ]);
@@ -66,11 +78,17 @@ class AlumniResource extends Resource
     {
         return $schema
             ->components([
+                ImageEntry::make('photo_path')
+                    ->label('Photo')
+                    ->circular()
+                    ->placeholder('-')
+                    ->columnSpanFull(),
                 TextEntry::make('name'),
                 TextEntry::make('nisn')
+                    ->label('NISN')
                     ->placeholder('-'),
                 TextEntry::make('graduation_year')
-                    ->numeric(),
+                    ->placeholder('-'),
                 TextEntry::make('current_school')
                     ->placeholder('-'),
                 TextEntry::make('current_occupation')
@@ -83,10 +101,7 @@ class AlumniResource extends Resource
                 TextEntry::make('testimonial')
                     ->placeholder('-')
                     ->columnSpanFull(),
-                TextEntry::make('photo_path')
-                    ->placeholder('-'),
-                IconEntry::make('is_featured')
-                    ->boolean(),
+
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
@@ -95,7 +110,10 @@ class AlumniResource extends Resource
                     ->placeholder('-'),
                 TextEntry::make('deleted_at')
                     ->dateTime()
-                    ->visible(fn (Alumni $record): bool => $record->trashed()),
+                    ->visible(fn(Alumni $record): bool => $record->trashed()),
+
+                IconEntry::make('is_featured')
+                    ->boolean(),
             ]);
     }
 
@@ -104,26 +122,24 @@ class AlumniResource extends Resource
         return $table
             ->recordTitleAttribute('name')
             ->columns([
+                ImageColumn::make('photo_path')
+                    ->circular()
+                    ->label('Photo')
+                    ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('nisn')
                     ->searchable(),
                 TextColumn::make('graduation_year')
-                    ->numeric()
                     ->sortable(),
                 TextColumn::make('current_school')
-                    ->searchable(),
-                TextColumn::make('current_occupation')
                     ->searchable(),
                 TextColumn::make('phone')
                     ->searchable(),
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
-                TextColumn::make('photo_path')
-                    ->searchable(),
-                IconColumn::make('is_featured')
-                    ->boolean(),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

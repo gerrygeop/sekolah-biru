@@ -15,12 +15,16 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class FacilityResource extends Resource
 {
     protected static ?string $model = Facility::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
+    protected static string|UnitEnum|null $navigationGroup = 'Profil Sekolah';
+    protected static string|null $label = 'Fasilitas Sekolah';
+    protected static ?int $navigationSort = -13;
 
     public static function form(Schema $schema): Schema
     {

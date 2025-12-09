@@ -22,8 +22,6 @@ class AchievementsTable
             ->columns([
                 TextColumn::make('title')
                     ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
                 TextColumn::make('category')
                     ->badge(),
                 TextColumn::make('level')
@@ -36,10 +34,6 @@ class AchievementsTable
                     ->searchable(),
                 TextColumn::make('achievement_date')
                     ->date()
-                    ->sortable(),
-                ImageColumn::make('image_path'),
-                TextColumn::make('created_by')
-                    ->numeric()
                     ->sortable(),
                 IconColumn::make('is_published')
                     ->boolean(),

@@ -20,18 +20,14 @@ class PhotoGalleriesTable
     {
         return $table
             ->columns([
+                ImageColumn::make('image_path'),
+
                 TextColumn::make('title')
                     ->searchable(),
                 TextColumn::make('slug')
                     ->searchable(),
-                ImageColumn::make('image_path'),
-                TextColumn::make('thumbnail_path')
-                    ->searchable(),
                 TextColumn::make('photo_date')
                     ->date()
-                    ->sortable(),
-                TextColumn::make('created_by')
-                    ->numeric()
                     ->sortable(),
                 TextColumn::make('order')
                     ->numeric()

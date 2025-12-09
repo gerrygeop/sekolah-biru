@@ -9,6 +9,7 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -19,6 +20,10 @@ class EmployeesTable
     {
         return $table
             ->columns([
+                ImageColumn::make('photo_path')
+                    ->label('Foto')
+                    ->circular()
+                    ->searchable(),
                 TextColumn::make('nip')
                     ->searchable(),
                 TextColumn::make('name')
@@ -27,16 +32,12 @@ class EmployeesTable
                     ->badge(),
                 TextColumn::make('position')
                     ->searchable(),
-                TextColumn::make('subject')
-                    ->searchable(),
                 TextColumn::make('education')
                     ->searchable(),
                 TextColumn::make('phone')
                     ->searchable(),
                 TextColumn::make('email')
                     ->label('Email address')
-                    ->searchable(),
-                TextColumn::make('photo_path')
                     ->searchable(),
                 TextColumn::make('join_date')
                     ->date()

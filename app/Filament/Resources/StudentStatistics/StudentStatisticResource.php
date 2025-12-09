@@ -18,20 +18,24 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class StudentStatisticResource extends Resource
 {
     protected static ?string $model = StudentStatistic::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartBar;
+    protected static string|UnitEnum|null $navigationGroup = 'Akademik';
+    protected static string|null $label = 'Statistik Siswa';
+    protected static ?int $navigationSort = -18;
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('academic_year_id')
+                Select::make('academicYear')
                     ->required()
-                    ->numeric(),
+                    ->relationship('academicYear', 'year'),
                 Select::make('grade')
                     ->options([7 => '7', '8', '9'])
                     ->required(),
@@ -54,7 +58,7 @@ class StudentStatisticResource extends Resource
     {
         return $schema
             ->components([
-                TextEntry::make('academic_year_id')
+                TextEntry::make('academicYear.year')
                     ->numeric(),
                 TextEntry::make('grade')
                     ->badge(),
@@ -77,7 +81,7 @@ class StudentStatisticResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('academic_year_id')
+                TextColumn::make('academicYear.year')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('grade')

@@ -29,16 +29,6 @@ class VirtualClassesTable
                     ->searchable(),
                 TextColumn::make('type')
                     ->badge(),
-                TextColumn::make('url')
-                    ->searchable(),
-                TextColumn::make('file_path')
-                    ->searchable(),
-                TextColumn::make('order')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_by')
-                    ->numeric()
-                    ->sortable(),
                 IconColumn::make('is_published')
                     ->boolean(),
                 TextColumn::make('created_at')

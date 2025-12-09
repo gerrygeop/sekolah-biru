@@ -37,8 +37,8 @@ class VirtualClassForm
                     ->required()
                     ->numeric()
                     ->default(0),
-                TextInput::make('created_by')
-                    ->numeric(),
+                Select::make('created_by')
+                    ->relationship('author', 'name'),
                 Toggle::make('is_published')
                     ->required(),
             ]);

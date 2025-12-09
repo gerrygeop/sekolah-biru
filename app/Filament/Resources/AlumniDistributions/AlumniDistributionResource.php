@@ -18,24 +18,33 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class AlumniDistributionResource extends Resource
 {
     protected static ?string $model = AlumniDistribution::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
+    protected static string|UnitEnum|null $navigationGroup = 'Alumni & Lulusan';
+    protected static string|null $label = 'Sebaran Alumni';
+    protected static ?int $navigationSort = -10;
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('academic_year_id')
+                Select::make('academic_year_id')
                     ->required()
-                    ->numeric(),
+                    ->relationship('academicYear', 'year'),
                 TextInput::make('school_name')
                     ->required(),
                 Select::make('school_type')
-                    ->options(['sma' => 'Sma', 'smk' => 'Smk', 'ma' => 'Ma', 'lainnya' => 'Lainnya'])
+                    ->options([
+                        'sma' => 'SMA',
+                        'smk' => 'SMK',
+                        'ma' => 'MA',
+                        'lainnya' => 'Lainnya'
+                    ])
                     ->required(),
                 TextInput::make('student_count')
                     ->required()
@@ -48,11 +57,12 @@ class AlumniDistributionResource extends Resource
     {
         return $schema
             ->components([
-                TextEntry::make('academic_year_id')
+                TextEntry::make('academicYear.year')
                     ->numeric(),
                 TextEntry::make('school_name'),
                 TextEntry::make('school_type')
-                    ->badge(),
+                    ->badge()
+                    ->formatStateUsing(fn(string $state): string => str($state)->upper()),
                 TextEntry::make('student_count')
                     ->numeric(),
                 TextEntry::make('created_at')
@@ -68,13 +78,14 @@ class AlumniDistributionResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('academic_year_id')
+                TextColumn::make('academicYear.year')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('school_name')
                     ->searchable(),
                 TextColumn::make('school_type')
-                    ->badge(),
+                    ->badge()
+                    ->formatStateUsing(fn(string $state): string => str($state)->upper()),
                 TextColumn::make('student_count')
                     ->numeric()
                     ->sortable(),

@@ -26,12 +26,17 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
+use UnitEnum;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserCircle;
+    protected static string|UnitEnum|null $navigationGroup = 'Manajemen Pengguna';
+    protected static string|null $label = 'Pengguna';
+    protected static ?int $navigationSort = -4;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -40,21 +45,27 @@ class UserResource extends Resource
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->maxLength(255),
                 TextInput::make('email')
-                    ->label('Email address')
                     ->email()
+                    ->required()
+                    ->maxLength(255),
+
+                Select::make('roles')
+                    ->relationship('roles', 'name')
                     ->required(),
-                Select::make('role')
-                    ->options(['admin' => 'Admin', 'staff' => 'Staff', 'petinggi' => 'Petinggi'])
-                    ->default('staff')
-                    ->required(),
-                Toggle::make('is_active')
-                    ->required(),
+
                 DateTimePicker::make('email_verified_at'),
+
                 TextInput::make('password')
                     ->password()
-                    ->required(),
+                    ->revealable()
+                    ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
+                    ->dehydrated(fn(?string $state): bool => filled($state))
+                    ->required(fn(string $operation): bool => $operation === 'create')
+                    ->minLength(8)
+                    ->maxLength(255),
             ]);
     }
 
@@ -68,10 +79,9 @@ class UserResource extends Resource
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
-                TextColumn::make('role')
-                    ->badge(),
-                IconColumn::make('is_active')
-                    ->boolean(),
+                TextColumn::make('roles.name')
+                    ->label('Role')
+                    ->searchable(),
                 TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
