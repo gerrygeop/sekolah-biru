@@ -80,10 +80,10 @@
 				</div>
 
 				<!-- Map -->
-				@if ($contact->maps_embed)
+				@if ($contact->google_maps_embed)
 					<div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
 						<div class="aspect-square">
-							{!! $contact->maps_embed !!}
+							{!! $contact->google_maps_embed !!}
 						</div>
 					</div>
 				@endif
