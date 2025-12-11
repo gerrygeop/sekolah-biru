@@ -37,7 +37,7 @@
 					</div>
 				</div>
 				<h2 class="text-2xl font-bold text-center text-gray-900 mb-8">Misi</h2>
-				<div class="prose prose-lg text-lg max-w-4xl mx-auto">
+				<div class="prose prose-lg text-lg text-center max-w-4xl mx-auto">
 					{!! nl2br(e($schoolProfile->mission)) !!}
 				</div>
 			</div>
